@@ -83,7 +83,6 @@ function analyzeSalesData(data, options) {
             return;
         }
         seller.sales_count += 1;
-        seller.revenue = +(seller.revenue + record.total_amount).toFixed(2);
 
         record.items.forEach(item => {
             const product = productIndex.get(item.sku);
@@ -91,9 +90,8 @@ function analyzeSalesData(data, options) {
 
             const cost = product.purchase_price * item.quantity;
             const revenue = calculateSimpleRevenue(item, product);
-            const profit = revenue - cost;
-            const roundedProfit = +profit.toFixed(2);
-            seller.profit = +(seller.profit + roundedProfit).toFixed(2);
+            seller.revenue += revenue;
+            seller.profit += revenue - cost;
 
             if (!seller.products_sold[item.sku]) {
                 seller.products_sold[item.sku] = 0;
