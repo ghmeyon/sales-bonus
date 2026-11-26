@@ -23,16 +23,13 @@ function calculateBonusByProfit(index, total, seller) {
     const { profit } = seller;
     let bonus;
     if (index === 0) {
-        bonus = profit * 1.15;
-    } 
-    if (index === 1 || index === 2) {
-        bonus = profit * 1.10;
-    }
-    if (index === total - 1) {
-        bonus = profit;
-    }
-    else {
-        bonus = profit * 0.5;
+        bonus = profit * 0.15;
+    } else if (index === 1 || index === 2) {
+        bonus = profit * 0.1;
+    } else if (index === total - 1) {
+        bonus = profit * 0;
+    } else {
+        bonus = profit * 0.05;
     }
     return +bonus.toFixed(2);
 }
