@@ -45,23 +45,13 @@ function calculateBonusByProfit(index, total, seller) {
  */
 function analyzeSalesData(data, options) {
     // @TODO: Проверка входных данных
-    console.log('Входные данные:', {
-    data: data,
-    data_sellers: data?.sellers,
-    isArray_sellers: Array.isArray(data?.sellers),
-    data_products: data?.products,
-    isArray_products: Array.isArray(data?.products),
-    data_receipts: data?.receipts,
-    isArray_receipts: Array.isArray(data?.receipts),
-    sellers_length: data?.sellers?.length
-  });
     if (!data
         || !Array.isArray(data.sellers)
         || !Array.isArray(data.products)
-        || !Array.isArray(data.receipts)
+        || !Array.isArray(data.purchase_records)
         || data.sellers.length === 0
         || data.products.length === 0
-        || data.receipts.length === 0
+        || data.purchase_records.length === 0
     ) {
         throw new Error('Некорректные входные данные');
     }
@@ -70,7 +60,7 @@ function analyzeSalesData(data, options) {
         throw new Error('Некорректные опции');
     }
 
-    const { calculateSimpleRevenue, calculateBonusByProfit } = options || {};
+    const { calculateRevenue: calculateSimpleRevenue, calculateBonus: calculateBonusByProfit } = options || {};
     if (typeof calculateSimpleRevenue !== 'function' || typeof calculateBonusByProfit !== 'function') {
         throw new Error('Некорректные функции расчета');
     }
@@ -90,7 +80,7 @@ function analyzeSalesData(data, options) {
     const productIndex = new Map(data.products.map(product => [product.sku, product]));
 
     // @TODO: Расчет выручки и прибыли для каждого продавца
-    data.receipts.forEach(record => {
+    data.purchase_records.forEach(record => {
         const seller = sellerIndex.get(record.seller_id);
         if (!seller) {
             return;
